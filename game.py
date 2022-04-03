@@ -20,18 +20,22 @@ parser.add_argument("--rolls", help="number of random points to draw", required=
 args = parser.parse_args()
 
 class Game:
-    def __init__(self, size, seed, points, divider, rolls):
+    def __init__(self, size, seed, points, divider, rolls, Debug=False):
         self._width = size[0] if size[0] % 2 == 0 else size[0] + 1
         self._height = size[1] if size[1] % 2 == 0 else size[1] + 1
         self._divider = divider
         self._rolls = rolls
+        self._points = points
+        self.Debug = Debug
         random.seed(seed)
-
         # Seed point
         self._seed_point = self._gen_coord() + (self._gen_color(),)
 
-        # Generate points random coordinates
-        self._points = [self._gen_points() for _ in range(points)]
+        # Generate the polygon
+        self._polygon = self._gen_points()
+
+        if Debug:
+            print("[DEBUG] Polygon: {}".format(self._polygon))
 
         # Initialize turtle screen with self width and height
         self._screen = turtle.Screen()
@@ -50,11 +54,13 @@ class Game:
         """ Generates a random coordinate within the grid """
         return (random.randint(-(self._width / 2), self._width/2), random.randint(-(self._height / 2), self._height/2))
 
+    # Generate points to draw a note polygon of <points> edges
     def _gen_points(self):
-        """ Generates the points and assign them a color """
-        x, y = self._gen_coord()
-        z = self._gen_color()
-        return (x, y, z)
+        if self._points == 3:
+            left_base = (-(self._width // 2), -(self._height // 2), self._gen_color())
+            right_base = (self._width // 2, -(self._height // 2), self._gen_color())
+            top_base = (0, self._height // 2, self._gen_color())
+            return [left_base, right_base, top_base]
     
     def _draw_dot(self, x, y, color="#000000"):
         """ Draws a dot at the given x and y coordinates """
@@ -65,8 +71,10 @@ class Game:
 
     def _draw_starters(self):
         """ Draws the starters dots with their color and the seed point """
-        for point in self._points:
-            # print("[DEBUG] Drawing point: {}".format(point))
+        for point in self._polygon:
+            if self.Debug:
+                print("[DEBUG] Drawing point: X: {} Y: {} Color: {}".format(point[0], point[1], point[2]))
+
             self._draw_dot(point[0], point[1], point[2])
 
         self._draw_dot(self._seed_point[0], self._seed_point[1])
@@ -74,15 +82,13 @@ class Game:
     def _get_new_coord(self, last_dot):
         """ Gets a new coordinate based on the last dot """
         x, y, _ = last_dot
-        a, b, c = random.choice(self._points)
+        a, b, c = random.choice(self._polygon)
 
         # Get the new x and y coordinates
         x = int((x + a) // self._divider)
         y = int((y + b) // self._divider)
 
         # Return the new coordinates and the color of the point picked
-
-        # print("[DEBUG] New coordinates: {}".format((x, y, c)))
 
         return (x, y, c)
 
@@ -102,5 +108,5 @@ class Game:
 
 # For Debug purposes
 if __name__ == '__main__':
-    game = Game(args.size, args.seed, args.points, args.divider, args.rolls)
+    game = Game(args.size, args.seed, args.points, args.divider, args.rolls, Debug=True)
     game.start()

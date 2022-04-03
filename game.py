@@ -16,7 +16,7 @@ parser.add_argument("--seed", help="seed for random number generator", required=
 parser.add_argument("--size", help="size of the grid", required=False, nargs=2, default=[800, 800], type=int)
 parser.add_argument("--points", help="number of points to play with", required=False, default=3, type=int)
 parser.add_argument("--divider", help="divider for the distance between random point and random-choosen point", required=False, default=2, type=int)
-parser.add_argument("--rolls", help="number of random points to draw", required=False, default=100000, type=int)
+parser.add_argument("--rolls", help="number of random points to draw", required=False, default=10000000, type=int)
 args = parser.parse_args()
 
 class Game:
@@ -61,7 +61,7 @@ class Game:
         self._turtle.penup()
         self._turtle.goto(x, y)
         self._turtle.pendown()
-        self._turtle.dot(2, color)
+        self._turtle.dot(5, color)
 
     def _draw_starters(self):
         """ Draws the starters dots with their color and the seed point """
@@ -97,6 +97,7 @@ class Game:
         """ Starts the game """
         self._draw_starters()
         self._chaos()
+        print("[INFO] Finished drawing chaos")
         self._screen.mainloop()
 
 # For Debug purposes

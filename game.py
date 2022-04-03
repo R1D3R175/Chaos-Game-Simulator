@@ -14,7 +14,7 @@ import os
 parser = argparse.ArgumentParser()
 parser.add_argument("--seed", help="seed for random number generator", required=False, default=os.urandom(32))
 parser.add_argument("--size", help="size of the grid", required=False, nargs=2, default=[800, 800], type=int)
-parser.add_argument("--points", help="number of points to play with", required=False, default=3, type=int)
+parser.add_argument("--points", help="number of points of the polygon", required=False, default=3, type=int)
 parser.add_argument("--divider", help="divider for the distance between random point and random-choosen point", required=False, default=2, type=int)
 parser.add_argument("--rolls", help="number of random points to draw", required=False, default=10000000, type=int)
 args = parser.parse_args()

@@ -42,12 +42,6 @@ class Game:
         self._turtle.hideturtle()
         self._turtle.speed(0)
 
-    def _gen_points(self):
-        """ Generates the points and assign them a color """
-        x, y = self._gen_coord()
-        z = self._gen_color()
-        return (x, y, z)
-
     def _gen_color(self):
         """ Generates a random color (in hex) """
         return "#{:06x}".format(random.randint(0, 0xFFFFFF))
@@ -55,6 +49,12 @@ class Game:
     def _gen_coord(self):
         """ Generates a random coordinate within the grid """
         return (random.randint(-(self._width / 2), self._width/2), random.randint(-(self._height / 2), self._height/2))
+
+    def _gen_points(self):
+        """ Generates the points and assign them a color """
+        x, y = self._gen_coord()
+        z = self._gen_color()
+        return (x, y, z)
     
     def _draw_dot(self, x, y, color="#000000"):
         """ Draws a dot at the given x and y coordinates """
